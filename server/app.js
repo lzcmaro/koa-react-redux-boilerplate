@@ -13,7 +13,10 @@ const app = koa();
 const compiler = webpack(config);
 
 app.use(require('koa-webpack-dev-middleware')(compiler, {
-  noInfo: true,
+  // noInfo: true,
+  stats: {
+    colors: true
+  },
   publicPath: config.output.publicPath
 }));
 
