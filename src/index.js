@@ -1,17 +1,22 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Provider } from 'react-redux';
 
-import configureStore from './store/configureStore';
-import createRoutes from './routes';
+import configureStore from './redux/configureStore';
+import routes from './routes';
+import createBrowserHistory from 'history/lib/createBrowserHistory';
+import { syncReduxAndRouter } from 'redux-simple-router';
+
+import Root from './containers/Root';
 
 
+const history = createBrowserHistory();
 const store = configureStore();
-const routes = createRoutes();
 
+syncReduxAndRouter(history, store, (state) => state.router);
+
+// Render the React application to the DOM
 render(
-  <Provider store={store}>
-    { routes }
-  </Provider>,
+  <Root history={history} routes={routes} store={store} />,
   document.getElementById('root')
 )
+

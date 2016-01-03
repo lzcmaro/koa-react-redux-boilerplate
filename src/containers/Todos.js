@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Header from '../components/todos/Header'
 import MainSection from '../components/todos/MainSection'
-import * as TodoActions from '../actions/todos'
+import { actions as todoActions } from '../redux/modules/todos'
 
 import 'todomvc-app-css/index.css'
 
@@ -15,6 +15,7 @@ class Todos extends Component {
 
   render() {
     const { todos, actions } = this.props
+
     return (
       <div className="todoapp">
         <Header addTodo={actions.addTodo} />
@@ -32,11 +33,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(TodoActions, dispatch)
+    actions: bindActionCreators(todoActions, dispatch)
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Todos)
+//绑定到Component，向Todos注入todos, actions属性
+export default connect(mapStateToProps, mapDispatchToProps)(Todos)
