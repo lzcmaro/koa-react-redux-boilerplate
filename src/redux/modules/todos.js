@@ -16,9 +16,9 @@ export const CLEAR_COMPLETED = 'CLEAR_COMPLETED'
 
 // This is a thunk. see the redux-thunk
 export const addTodo = text => dispatch => {
-	//{type, payload} 为redux-actions.createAction所返回对象，这里和它保持一致，方便在reducers中使用
-  	setTimeout(() => dispatch({ type: ADD_TODO, payload: text }), 500)
-  }
+  //{type, payload} 为redux-actions.createAction所返回对象，这里和它保持一致，方便在reducers中使用
+  setTimeout(() => dispatch({ type: ADD_TODO, payload: text }), 500)
+}
 
 /**
  * createAction(type, actionCreator, metaCreator), actionCreator缺省为：
@@ -61,35 +61,49 @@ const initialState = [
 
 export default handleActions({
   
-  [ADD_TODO]: (state, { payload }) => (
-  	  [
+  [ADD_TODO] (state, action) {
+    return [
         {
           id: state.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
           completed: false,
-          text: payload
+          text: action.payload
         }, 
         ...state
       ]
-    ),
-  [DELETE_TODO]: (state, { payload }) => state.filter(todo =>
-        todo.id !== payload
-      ),
-  [EDIT_TODO]: (state, { payload }) => state.map(todo =>
-        todo.id === payload.id ?
-          Object.assign({}, todo, { text: payload.text }) :
-          todo
-      ),
-  [COMPLETE_TODO]: (state, { payload }) => state.map(todo =>
-        todo.id === payload ?
-          Object.assign({}, todo, { completed: !todo.completed }) :
-          todo
-      ),
-  [COMPLETE_ALL]: function(state){
-      const areAllMarked = state.every(todo => todo.completed)
-      return state.map(todo => Object.assign({}, todo, {
+  },
+
+  [DELETE_TODO] (state, action) {
+    return state.filter(todo => todo.id !== action.payload)
+  },
+
+  [EDIT_TODO] (state, action) {
+    return state.map(todo => {
+      return todo.id === action.payload.id
+        ? { ...todo, text: action.payload.text }
+        : todo
+    })
+  },
+
+  [COMPLETE_TODO] (state, action) { 
+    return state.map(todo => {
+      return todo.id === action.payload
+        ? { ...todo, completed: !todo.completed }
+        : todo
+    })
+  },
+
+  [COMPLETE_ALL] (state, action) {
+    const areAllMarked = state.every(todo => todo.completed)
+    return state.map(todo => {
+      return {
+        ...todo,
         completed: !areAllMarked
-      })) 
-    },
-  [CLEAR_COMPLETED]: state => state.filter(todo => todo.completed === false)
+      }
+    }) 
+  },
+
+  [CLEAR_COMPLETED] (state, action) {
+    return state.filter(todo => todo.completed === false)
+  }
 
 }, initialState)
