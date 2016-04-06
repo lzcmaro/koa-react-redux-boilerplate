@@ -41,6 +41,7 @@
     "babel-preset-stage-0": "^6.3.13",
     "css-loader": "^0.23.1",
     "file-loader": "^0.8.5",
+    "json-loader": "^0.5.4",
     "koa-webpack-dev-middleware": "^1.1.0",
     "koa-webpack-hot-middleware": "^1.0.3",
     "nodemon": "^1.8.1",
